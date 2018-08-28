@@ -11,6 +11,6 @@ Double click dubbo-ui-1.0.jar (or execute "java -jar dubbo-ui-1.0.jar" in comman
 双击 dubbo-ui-1.0.jar 或在命令行执行命令 java -jar dubbo-ui-1.0.jar 启动应用程序。
 
 以下图方式进行dubbo接口测试：
-
+1
 
 
