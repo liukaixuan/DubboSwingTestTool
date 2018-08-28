@@ -1,6 +1,6 @@
 # Documents
 
-Download all files in /target folder.
+Download all files under folder "/target" in orginal structure.
 
 Double click dubbo-ui-1.0.jar (or execute "java -jar dubbo-ui-1.0.jar" in command line) to run the application.
 
