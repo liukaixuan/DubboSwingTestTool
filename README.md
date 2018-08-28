@@ -12,5 +12,5 @@ Double click dubbo-ui-1.0.jar (or execute "java -jar dubbo-ui-1.0.jar" in comman
 
 以下图方式进行dubbo接口测试：
 1
-
+2
 
