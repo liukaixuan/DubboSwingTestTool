@@ -16,6 +16,7 @@
  */
 package tools.dubbotest;
 
+import org.apache.log4j.Logger;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
@@ -27,6 +28,8 @@ import java.net.URLClassLoader;
  * @author liukaixuan(liukaixuan@gmail.com)
  */
 public class MavenClassLoader {
+
+	private static final Logger log = Logger.getLogger(MavenClassLoader.class);
 
 	public ClassLoader getClassLoader(String pom) throws Throwable {
 		URL url = buildURL(pom);
@@ -43,11 +46,11 @@ public class MavenClassLoader {
 		return maven;
 	}
 
-	protected URL buildURL(String pom) {
+	protected URL buildURL(String jarLocation) {
 		try {
-			return new URL(pom);
+			return new URL(jarLocation);
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			log.error("failed to build jarLocation url:" + jarLocation, e);
 			return null;
 		}
 	}

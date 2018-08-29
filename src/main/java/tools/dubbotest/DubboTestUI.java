@@ -21,6 +21,7 @@ import tools.dubbotest.save.HistoryDataStore;
 import tools.dubbotest.save.JarData;
 import tools.dubbotest.save.MethodInfo;
 import tools.dubbotest.util.LangHelper;
+import tools.dubbotest.util.SystemHelper;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -39,6 +40,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author liukaixuan(liukaixuan@gmail.com)
  */
 public class DubboTestUI extends JFrame {
+
+	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(DubboTestUI.class);
 
 	final static int PADDING = 10;
 
@@ -103,6 +106,24 @@ public class DubboTestUI extends JFrame {
 
 		//添加元素
 		this.addFixRow(fixed);
+
+		this.buildMenu();
+	}
+
+	private void buildMenu() {
+		JMenu jm = new JMenu(LangHelper.getText("Help"));
+		JMenuItem t1 = new JMenuItem(LangHelper.getText("Upgrade"));
+		t1.addActionListener(new ActionListener() {
+			@Override public void actionPerformed(ActionEvent e) {
+				SystemHelper.openBrowser("https://github.com/liukaixuan/DubboSwingTestTool");
+			}
+		});
+		jm.add(t1);
+
+		JMenuBar br = new JMenuBar();  //创建菜单工具栏
+		br.add(jm);      //将菜单增加到菜单工具栏
+
+		this.setJMenuBar(br);  //为 窗体设置  菜单工具栏
 	}
 
 	private void addFixRow(JPanel fixed) {
@@ -181,7 +202,7 @@ public class DubboTestUI extends JFrame {
 
 					showResult(obj);
 				} catch (Exception e1) {
-					e1.printStackTrace();
+					log.error("failed to invoke selected method:" + selectedApi, e1);
 
 					JOptionPane.showMessageDialog(null, LangHelper.getText("callApiFailed") + e1.getMessage(),
 							LangHelper.getText("callServiceFailed"), JOptionPane.ERROR_MESSAGE);
@@ -266,7 +287,7 @@ public class DubboTestUI extends JFrame {
 
 			return instance;
 		} catch (Throwable throwable) {
-			throwable.printStackTrace();
+			log.error("failed to init selected method:" + selectedApi, throwable);
 
 			JOptionPane.showMessageDialog(null, LangHelper.getText("getApiFailed") + throwable.getMessage(),
 					LangHelper.getText("getServiceFailed"), JOptionPane.ERROR_MESSAGE);
@@ -276,6 +297,8 @@ public class DubboTestUI extends JFrame {
 	}
 
 	protected void syncUIToJarInfo() {
+		this.dataStore.switchToJar(getComponetInputValue(inputComponts.get("jarLocation")));
+
 		this.dataStore.setJarDataInfo(getComponetInputValue(inputComponts.get("zookeeper")),
 				getComponetInputValue(inputComponts.get("service")), getComponetInputValue(inputComponts.get("group")),
 				getComponetInputValue(inputComponts.get("version")));
@@ -451,6 +474,10 @@ public class DubboTestUI extends JFrame {
 	}
 
 	public static void main(String[] args) {
+		//move menu bar to the top in Mac OS
+		//Doc: http://www.oracle.com/technetwork/articles/javase/javatomac-140486.html
+		System.setProperty("apple.laf.useScreenMenuBar", "true");
+
 		DubboTestUI ui = new DubboTestUI();
 	}
 

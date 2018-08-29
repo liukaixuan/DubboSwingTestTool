@@ -17,8 +17,7 @@
 package tools.dubbotest;
 
 import com.google.gson.Gson;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,7 +29,7 @@ import java.util.Map;
  * @author liukaixuan(liukaixuan@gmail.com)
  */
 public class JavaTypeHandlers {
-	private static Logger log = LoggerFactory.getLogger(DubboFactory.class);
+	private static Logger log = Logger.getLogger(JavaTypeHandlers.class);
 
 	public static final Map COMMON_DATA_TYPE_HANDLERS = new HashMap();
 
@@ -94,12 +93,8 @@ public class JavaTypeHandlers {
 		Object instance = null;
 		try {
 			instance = cls.newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-
-			return null;
+		} catch (Exception e) {
+			log.error("failed to generate default value for class:" + cls, e);
 		}
 
 		//转成json

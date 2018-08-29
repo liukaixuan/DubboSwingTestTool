@@ -19,6 +19,7 @@ package tools.dubbotest.save;
 import com.alibaba.dubbo.common.utils.IOUtils;
 import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import tools.dubbotest.JavaTypeHandlers;
 
 import java.io.*;
@@ -30,6 +31,8 @@ import java.lang.reflect.Method;
  * @author liukaixuan(liukaixuan@gmail.com)
  */
 public class HistoryDataStore {
+
+	private static final Logger log = Logger.getLogger(HistoryDataStore.class);
 
 	private final File file;
 
@@ -67,13 +70,12 @@ public class HistoryDataStore {
 				//删掉文件
 				file.delete();
 
-				e.printStackTrace();
+				log.error("failed to load history data from :" + file.getAbsolutePath(), e);
 			} finally {
 				if (reader != null) {
 					try {
 						reader.close();
 					} catch (IOException e) {
-						e.printStackTrace();
 					}
 				}
 			}
@@ -164,7 +166,7 @@ public class HistoryDataStore {
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
-				e.printStackTrace();
+				log.error("failed to create history data file:" + file.getAbsolutePath(), e);
 				return;
 			}
 		}
@@ -176,14 +178,13 @@ public class HistoryDataStore {
 			String content = new Gson().toJson(this.historyData);
 
 			IOUtils.write(w, content);
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			log.error("failed to save history data file:" + file.getAbsolutePath(), e);
 		} finally {
 			if (w != null) {
 				try {
 					w.close();
 				} catch (IOException e) {
-					e.printStackTrace();
 				}
 			}
 		}

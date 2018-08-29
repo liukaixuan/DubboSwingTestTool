@@ -12,5 +12,5 @@ target/classes/
 target/generated-sources/
 target/maven*
 target/surefire/
-
+dubbotest*
 
